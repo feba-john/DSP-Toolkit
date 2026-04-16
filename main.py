@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
-from signal_generator import generate_sine, add_noise
+import signal_generator
+import output
+import transform
 
 # parameters
 fs = 1000
@@ -7,18 +9,17 @@ freq = 5
 duration = 1
 
 # function to generate sine wave
-t, signal = generate_sine(freq, fs, duration)
+t, signal = signal_generator.generate_sine(freq, fs, duration)
+output.save_plot(t, signal, "Sine Wave", "Time",
+                 "Amplitude", "sine_signal.png")
 
-# plots
-plt.plot(t, signal)
-plt.title("Sine Wave")
-plt.xlabel("Time")
-plt.ylabel("Amplitude")
-# plt.savefig("results/output.png")
-plt.show()
 
-noisy_signal = add_noise(signal, 0.5)
-plt.plot(t, noisy_signal)
-plt.title("Noisy signal")
-plt.savefig("results/output.png")
-plt.show()
+# function to add noise
+noisy_signal = signal_generator.add_noise(signal, 0.5)
+output.save_plot(t, noisy_signal, "Noisy sine wave",
+                 "Time", "Amplitude", "noisy_signal.png")
+
+# function for transform signal
+freq, spectrum = transform.compute_fft(signal, fs)
+output.save_plot(freq, spectrum, "Frequency spectrum",
+                 "Frequency", "Amplitude", "freq_spectrum.png")
